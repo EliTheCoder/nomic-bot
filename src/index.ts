@@ -65,12 +65,26 @@ client.on("interactionCreate", async interaction => {
 			break;
 		}
 		case "scoreboard": {
+			const maxLength = Object.keys(scoreboard).reduce(
+				(acc, key, ind) =>
+					Math.max(
+						acc,
+						key.length +
+							Object.values(scoreboard)[ind].toString().length
+					),
+				0
+			);
 			const embed = new MessageEmbed()
 				.setTitle("Scoreboard")
 				.setDescription(
-					Object.entries(scoreboard)
-						.map(([key, value]) => `${key}: ${value}`)
-						.join("\n")
+					`\`\`\`${Object.entries(scoreboard)
+						.map(
+							([key, value]) =>
+								`${key} ${value
+									.toString()
+									.padStart(maxLength - key.length + 1, " ")}`
+						)
+						.join("\n")}\`\`\``
 				);
 			interaction.reply({embeds: [embed]});
 			break;
