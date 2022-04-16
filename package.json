@@ -1,5 +1,5 @@
 {
-	"name": "caonting",
+	"name": "nomic-bot",
 	"version": "1.0.0",
 	"main": "index.js",
 	"license": "GPL-3.0",
@@ -11,6 +11,7 @@
 	"dependencies": {
 		"@discordjs/builders": "^0.12.0",
 		"@discordjs/rest": "^0.3.0",
+		"axios": "^0.26.1",
 		"better-logging": "^4.7.0",
 		"discord.js": "^13.6.0"
 	},
