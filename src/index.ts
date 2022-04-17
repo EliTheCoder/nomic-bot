@@ -22,33 +22,15 @@ const {token} = JSON.parse(
 );
 
 let ruleset: Rule[] = [];
-axios("https://e.elithecoder.com/nomic/ruleset.json").then(res => {
-	ruleset = res.data;
-});
-
 let scoreboard: {[key: string]: number} = {};
-axios("https://e.elithecoder.com/nomic/scoreboard.json").then(res => {
-	scoreboard = res.data;
-});
-
-// const commands = [
-// 	new SlashCommandBuilder()
-// 		.setName("ping")
-// 		.setDescription("Replies with pong"),
-// 	new SlashCommandBuilder()
-// 		.setName("scoreboard")
-// 		.setDescription("Replies with the curreent scoreboard"),
-// 	new SlashCommandBuilder()
-// 		.setName("rule")
-// 		.setDescription("Replies with the requested rule")
-// 		.addIntegerOption(option =>
-// 			option
-// 				.setName("id")
-// 				.setDescription("The ordinal number of the rule")
-// 		)
-// ].map(command => command.toJSON());
-
-// const rest = new REST({version: "9"}).setToken(token);
+async function updateData() {
+	ruleset = (await axios("https://e.elithecoder.com/nomic/ruleset.json"))
+		.data;
+	scoreboard = (
+		await axios("https://e.elithecoder.com/nomic/scoreboard.json")
+	).data;
+}
+updateData();
 
 const client = new Client({intents: []} as ClientOptions);
 
@@ -58,6 +40,8 @@ client.once("ready", () => {
 
 client.on("interactionCreate", async interaction => {
 	if (!interaction.isCommand()) return;
+
+	updateData();
 
 	switch (interaction.commandName) {
 		case "ping": {
@@ -98,7 +82,7 @@ client.on("interactionCreate", async interaction => {
 			} else {
 				const embed = new MessageEmbed()
 					.setTitle(`${rule.immutable ? "🔒 " : ""}${rule.id}`)
-					.setDescription(rule.content)
+					.setDescription(rule.content.replace(/\n/g, "\n\n"))
 					.setFooter({
 						text: `${rule.author ? `Author: ${rule.author}` : ""}`
 					});
