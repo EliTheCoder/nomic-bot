@@ -93,4 +93,6 @@ client.on("interactionCreate", async interaction => {
 	}
 });
 
+setInterval(updateData, 1000 * 60);
+
 client.login(token);
